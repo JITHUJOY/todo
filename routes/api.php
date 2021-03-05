@@ -21,3 +21,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('register',[AuthController::class,'register']);
 Route::post('login',[AuthController::class,'login']);
+
+Route::group(['prefix'=>'task'],function(){
+   Route::group(['middleware' => 'auth:api'],function(){
+       Route::get('get_all_task',[\App\Http\Controllers\Api\Task\TaskController::class,'getAllTask']);
+       Route::post('add_task',[\App\Http\Controllers\Api\Task\TaskController::class,'store']);
+       Route::post('update_task',[\App\Http\Controllers\Api\Task\TaskController::class,'update']);
+       Route::post('delete_task',[\App\Http\Controllers\Api\Task\TaskController::class,'destroy']);
+   }) ;
+});
