@@ -25,7 +25,7 @@ class TaskController extends Controller
         $data->status = $request->status;
         $data->save();
 
-        return response()->json($data,201)
+        return response()->json($data,201);
     }
 
 
@@ -45,6 +45,6 @@ class TaskController extends Controller
         $data->status = $request->status;
         $data->save();
 
-        return response()->json($data,201)
+        return response()->json($data,201);
     }
 }
