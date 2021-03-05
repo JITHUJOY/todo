@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Task;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use http\Env\Response;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -36,6 +37,7 @@ class TaskController extends Controller
 
     public function update(Request $request) {
         $validateData = $request->validate([
+            'id' => 'required',
             'user_id' => 'required',
             'title'=> 'required',
             'body' => 'required',
@@ -56,17 +58,23 @@ class TaskController extends Controller
 
     public function destroy(Request $request)
     {
-        $task = Task::where('id','=',$request->id)->first();
+        $task = Task::where('id', '=', $request->id)->first();
 
-        if($task->user_id == $request->user_id)
-        {
-            $task->delete();
+        if (!empty($task)) {
+            if ($task->user_id == $request->user_id) {
+                $task->delete();
+
+                return response()->json([
+                    'success' => 'Your task  is deleted successfully'
+                ], 200);
+
+            }
 
             return response()->json([
-                'success'=> 'Your task  is deleted successfully'
-            ],200);
-
+                'error' => 'Task does not belong to you'
+            ], 404);
         }
+
 
         return response()->json([
             'error'=> 'Task does not belong to you'
